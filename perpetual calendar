@@ -1,0 +1,67 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+using namespace std;
+
+int const START_YEAR = 1919; 
+int const DAYS_YEAR = 365; 
+int const SHIFT = 2; 
+int const WEEK = 7; 
+string const months[] = {"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
+
+int is_leap_year(int year) { //функция для определения високосного года
+    return (year % 400 == 0) || (year % 4 == 0 && year % 100 !=0);
+}
+
+int month_days(int month, int year) { //функция для определения количества дней в месяце
+    int mDays [12] = {31, 28 + is_leap_year(year) , 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    return mDays[month-1];
+} 
+
+int month_start(int month, int t_year) { //функция для определения с какого дня недели начинается месяц ("0"-пн, "1"-вт, "2" -ср, 3"-чт, "4"-пт, "5"-сб, "6"-вс)
+    int year = START_YEAR, total = 0;
+    for (year = START_YEAR; year < t_year; year ++) {
+        total += (is_leap_year(year) + DAYS_YEAR) ;
+    }
+    for  (int current_month = 1; current_month < month;current_month++) {
+        total += (month_days(current_month, year));
+    }
+    return ((total + SHIFT ) % WEEK);
+}
+
+void print_calender(int month, int year) { //функция для создания календарной сетки
+    
+    int days_in_week = 0, days_in_month = 1;
+    cout << months[month - 1] << " " << year << endl;
+    
+    cout << "Пн\tВт\tСр\tЧт\tПт\tСб\tВс" << endl;
+    for (days_in_week = 0; days_in_week < month_start(month, year); days_in_week ++)
+       cout << "\t";
+    for (days_in_month = 1; days_in_month <= month_days(month, year); days_in_month++ ) {
+        cout << days_in_month << "\t";
+        if ((days_in_week + days_in_month) % 7 ==0) {
+            cout << endl;
+        }
+    }
+}
+    
+int main(){  //вывод календаря
+    
+    int year, month;
+    cout << "Введите год - ";
+    cin >> year;
+    cout << "Введите номер месяца - ";
+    cin >> month;
+    
+    print_calender(month, year);
+}
+
+
+
+
+
+
+
+
+
+
